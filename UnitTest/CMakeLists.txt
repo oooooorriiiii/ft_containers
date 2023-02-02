@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(ft_containers_test)
+project(ft_containers_UnitTest)
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
@@ -16,13 +16,13 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(
-        ft_containers_test
+        ft_containers_UnitTest
         vectorTest.cpp
 )
 target_link_libraries(
-        ft_containers_test
+        ft_containers_UnitTest
         GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(ft_containers_test)
+gtest_discover_tests(ft_containers_UnitTest)
