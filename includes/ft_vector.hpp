@@ -229,7 +229,7 @@ class vector {
     }
   }
 
-  void resize(size_type sz, T value = T()) {
+  void resize(size_type sz, const_reference value) {
     if (sz < size()) {
       auto diff = size() - sz;
       destroy_until(rbegin() + diff);
