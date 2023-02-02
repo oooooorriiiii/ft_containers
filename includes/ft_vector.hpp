@@ -26,9 +26,9 @@ class vector {
 
 //  https://en.cppreference.com/w/cpp/container/vector/vector
   vector() : vector(allocator_type()) {};
-  explicit vector(const allocator_type &alloc) noexcept: first(nullptr),
-                                                         last(nullptr),
-                                                         reserved_last(nullptr),
+  explicit vector(const allocator_type &alloc) noexcept: first(NULL),
+                                                         last(NULL),
+                                                         reserved_last(NULL),
                                                          alloc(alloc) {};
   explicit vector(size_type count,
                   const T &value = T(),
@@ -174,13 +174,13 @@ class vector {
   iterator end() const noexcept { return last; }
   const_iterator cbegin() const noexcept { return first; }
   const_iterator cend() const noexcept { return last; }
-  reverse_iterator rbegin() noexcept { return reverse_iterator{first}; }
+  reverse_iterator rbegin() noexcept { return reverse_iterator{last}; }
   const_reverse_iterator rbegin() const noexcept {
-    return reverse_iterator{first};
-  }
-  reverse_iterator rend() noexcept { return reverse_iterator{last}; }
-  const_reverse_iterator rend() const noexcept {
     return reverse_iterator{last};
+  }
+  reverse_iterator rend() noexcept { return reverse_iterator{first}; }
+  const_reverse_iterator rend() const noexcept {
+    return reverse_iterator{first};
   }
 
   /*
