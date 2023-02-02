@@ -41,13 +41,13 @@ class vector {
          InputIterator last,
          const Allocator &allocator = Allocator(),
          typename std::enable_if<!std::is_integral<InputIterator>::value,
-                                 InputIterator>::type * = nullptr) : first(nullptr), last(nullptr), reserved_last(nullptr), alloc(allocator) {
+                                 InputIterator>::type * = nullptr) : first(
+      nullptr), last(nullptr), reserved_last(nullptr), alloc(allocator) {
     reserve(std::distance(first, last));
     for (auto i = first; i != last; ++i) {
       push_back(*i);
     }
   }
-
 
   /*
    * destructor
@@ -58,19 +58,22 @@ class vector {
     deallocate();
   };
 
-
   /*
    * copy constructor
    */
 
-  vector(const vector& r) : first(NULL), last(NULL), reserved_last(NULL), alloc(traits::select_on_container_copy_construction(r.alloc)) {
+  vector(const vector &r)
+      : first(NULL),
+        last(NULL),
+        reserved_last(NULL),
+        alloc(traits::select_on_container_copy_construction(r.alloc)) {
     reserve(r.size());
-    for (auto dest = first, src = r.begin(), last = r.end(); src != last; ++dest, ++src) {
+    for (auto dest = first, src = r.begin(), last = r.end(); src != last;
+         ++dest, ++src) {
       construct(dest, *src);
     }
     last = first + r.size();
   }
-
 
   /*
    * operator
@@ -85,28 +88,28 @@ class vector {
       std::copy(r.begin(), r.end(), begin());
     } else if (capacity() >= r.size()) {
       std::copy(r.begin(), r.begin() + r.size(), begin());
-      for (auto src_iter = r.begin() + r.size(), src_end = r.end(); src_iter != src_end; ++src_iter, ++last) {
+      for (auto src_iter = r.begin() + r.size(), src_end = r.end();
+           src_iter != src_end; ++src_iter, ++last) {
         construct(last, *src_iter);
       }
     } else {
       destroy_until(rbegin());
       reserve(r.size());
-      for (auto src_iter = r.begin(), src_end = r.end(), dest_iter = begin(); src_iter != src_end; ++dest_iter, ++last) {
+      for (auto src_iter = r.begin(), src_end = r.end(), dest_iter = begin();
+           src_iter != src_end; ++dest_iter, ++last) {
         construct(dest_iter, *src_iter);
       }
     }
     return *this;
   };
 
-
   /*
    *
    */
 
-  size_type size() const noexcept { return end() = begin(); }
+  size_type size() const noexcept { return end() - begin(); }
   bool empty() const noexcept { return begin() == end(); }
-  size_type capacity() const noexcept { return reserved_last = first; }
-
+  size_type capacity() const noexcept { return reserved_last - first; }
 
   /*
    *
@@ -125,7 +128,6 @@ class vector {
     construct(last, value);
     ++last;
   }
-
 
   /*
    *
@@ -146,7 +148,6 @@ class vector {
     return first[i];
   }
 
-
   /*
    *
    */
@@ -156,14 +157,12 @@ class vector {
   reference back() { return *(last - 1); }
   const_reference back() const { return *(last - 1); }
 
-
   /*
    *
    */
 
   pointer data() noexcept { return first; }
   const_pointer data() const noexcept { return first; }
-
 
   /*
    * iterator
@@ -176,10 +175,13 @@ class vector {
   const_iterator cbegin() const noexcept { return first; }
   const_iterator cend() const noexcept { return last; }
   reverse_iterator rbegin() noexcept { return reverse_iterator{first}; }
-  const_reverse_iterator rbegin() const noexcept { return reverse_iterator{first}; }
+  const_reverse_iterator rbegin() const noexcept {
+    return reverse_iterator{first};
+  }
   reverse_iterator rend() noexcept { return reverse_iterator{last}; }
-  const_reverse_iterator rend() const noexcept { return reverse_iterator{last}; }
-
+  const_reverse_iterator rend() const noexcept {
+    return reverse_iterator{last};
+  }
 
   /*
    *
@@ -189,7 +191,7 @@ class vector {
 
   void reserve(size_type sz) {
     if (sz <= capacity()) {
-      return ;
+      return;
     }
 
     auto ptr = allocate(sz);
@@ -206,7 +208,8 @@ class vector {
       construct(last, std::move(*old_iter));
     }
 
-    for (auto r_iter = reverse_iterator(old_last), r_end = reverse_iterator(old_first); r_iter != r_end; ++r_iter) {
+    for (auto r_iter = reverse_iterator(old_last),
+             r_end = reverse_iterator(old_first); r_iter != r_end; ++r_iter) {
       destroy(&(*r_iter));
     }
 
@@ -226,24 +229,23 @@ class vector {
     }
   }
 
-  void resize(size_type sz, const_reference value) {
+  void resize(size_type sz, T value = T()) {
     if (sz < size()) {
       auto diff = size() - sz;
       destroy_until(rbegin() + diff);
       last = first + sz;
     } else if (sz > size()) {
       reserve(sz);
-      for ( ; last != reserved_last; ++last) {
+      for (; last != reserved_last; ++last) {
         construct(last, value);
       }
     }
   }
 
-
  private:
-  pointer first = nullptr;
-  pointer last = nullptr;
-  pointer reserved_last = nullptr;
+  pointer first;
+  pointer last;
+  pointer reserved_last;
   allocator_type alloc;
 
 
@@ -255,15 +257,22 @@ class vector {
   pointer allocate(size_type n) { return traits::allocate(alloc, n); }
   void deallocate() { traits::deallocate(alloc, first, capacity()); }
   void construct(pointer ptr) { traits::construct(alloc, ptr); }
-  void construct(pointer ptr, const_reference value) { traits::construct(alloc, ptr, value); }
-  void constrcut(pointer ptr, value_type && value) { traits::construct(alloc, ptr, std::move(value)); }
+  void construct(pointer ptr, const_reference value) {
+    traits::construct(alloc,
+                      ptr,
+                      value);
+  }
+  void construct(pointer ptr, value_type &&value) {
+    traits::construct(alloc,
+                      ptr,
+                      std::move(value));
+  }
   void destroy(pointer ptr) { traits::destroy(alloc, ptr); }
   void destroy_until(reverse_iterator rend) {
     for (auto r_iter = rbegin(); r_iter != rend; ++r_iter, --last) {
       destroy(&(*r_iter));
     }
   }
-
 
 };
 
