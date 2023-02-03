@@ -30,14 +30,19 @@ class vector {
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
 //  https://en.cppreference.com/w/cpp/container/vector/vector
-  vector() : vector(allocator_type()) {};
+  vector()
+      : first_(NULL),
+        last_(NULL),
+        reserved_last_(NULL),
+        alloc_(allocator_type()) {}
   explicit vector(const allocator_type &alloc) : first_(NULL),
                                                  last_(NULL),
                                                  reserved_last_(NULL),
                                                  alloc_(alloc) {}
   explicit vector(size_type count,
                   const T &value = T(),
-                  const Allocator &alloc = Allocator()) : vector(alloc) {
+                  const Allocator &alloc = Allocator())
+      : first_(NULL), last_(NULL), reserved_last_(NULL), alloc_(alloc) {
     resize(count, value);
   }
 
@@ -46,7 +51,7 @@ class vector {
          InputIterator last,
          const Allocator &allocator = Allocator(),
          typename ft::enable_if<!ft::is_integral<InputIterator>::value,
-                                 InputIterator>::type * = NULL) : first_(
+                                InputIterator>::type * = NULL) : first_(
       NULL), last_(NULL), reserved_last_(NULL), alloc_(allocator) {
     reserve(std::distance(first, last));
     for (pointer i = first; i != last; ++i) {
@@ -100,7 +105,8 @@ class vector {
     } else {
       destroy_until(rbegin());
       reserve(r.size());
-      for (const_iterator src_iter = r.begin(), src_end = r.end(), dest_iter = begin();
+      for (const_iterator src_iter = r.begin(), src_end = r.end(),
+               dest_iter = begin();
            src_iter != src_end; ++dest_iter, ++last_) {
         construct(dest_iter, *src_iter);
       }
@@ -209,7 +215,8 @@ class vector {
     last_ = first_;
     reserved_last_ = first_ + sz;
 
-    for (pointer old_iter = old_first; old_iter != old_last; ++old_iter, ++last_) {
+    for (pointer old_iter = old_first; old_iter != old_last;
+         ++old_iter, ++last_) {
       construct(last_, *old_iter);
     }
 
@@ -253,7 +260,6 @@ class vector {
   pointer reserved_last_;
   allocator_type alloc_;
 
-
   /*
    *
    */
@@ -265,7 +271,8 @@ class vector {
     alloc_.deallocate(first_, capacity());
   }
   void construct(pointer ptr) {
-    alloc_.construct(ptr, 0); }
+    alloc_.construct(ptr, 0);
+  }
   void construct(pointer ptr, const_reference value) {
     alloc_.construct(ptr, value);
   }
@@ -278,7 +285,8 @@ class vector {
     alloc_.destroy(ptr);
   }
   void destroy_until(reverse_iterator rend) {
-    for (reverse_iterator r_iter = rbegin(); r_iter != rend; ++r_iter, --last_) {
+    for (reverse_iterator r_iter = rbegin(); r_iter != rend;
+         ++r_iter, --last_) {
       destroy(&(*r_iter));
     }
   }
