@@ -33,4 +33,6 @@ namespace ft = std;
 #include <string>
 #include <typeinfo>
 
+void vector_test();
+
 #endif //FT_CONTAINERS_TESTFILES_TESTER_HPP_
