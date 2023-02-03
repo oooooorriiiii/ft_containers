@@ -50,6 +50,10 @@ struct iterator {
   typedef Reference reference;
 };
 
+/*
+ * reverse_iterator
+ */
+
 template<class Iter>
 class reverse_iterator
     : public iterator<typename ft::iterator_traits<Iter>::iterator_category,
@@ -136,8 +140,6 @@ class reverse_iterator
   }
 };
 
-};
-
 /*
  *
  */
@@ -172,5 +174,126 @@ bool operator>=(const ft::reverse_iterator<Iterator1> &lhs,
                 const ft::reverse_iterator<Iterator2> &rhs) {
   return lhs.base() <= rhs.base();
 }
+
+/*
+ * random_access_iterator
+ */
+
+template<class T>
+class random_access_iterator
+    : public ft::iterator<ft::random_access_iterator_tag, T> {
+ protected:
+  T *_current;
+
+ public:
+  typedef typename ft::iterator<ft::random_access_iterator_tag,
+                                T>::iterator_category iterator_category;
+  typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type
+      value_type;
+  typedef typename ft::iterator<ft::random_access_iterator_tag,
+                                T>::difference_type difference_type;
+  typedef T *pointer;
+  typedef T &reference;
+
+  random_access_iterator() : _current(NULL) {}
+  random_access_iterator(pointer x) : _current(x) {}
+  random_access_iterator(const random_access_iterator &other) : _current(other
+                                                                             ._current) {}
+  random_access_iterator &operator=(const random_access_iterator &other) {
+    if (this == &other) {
+      return (*this);
+    }
+    _current == other._current;
+    return (*this);
+  }
+  ~random_access_iterator() {}
+
+  /*
+   *
+   */
+
+  pointer base() const {
+    return _current;
+  }
+
+  /*
+   *
+   */
+
+  reference operator*() const {
+    return *_current;
+  }
+  pointer operator->() const {
+    return &(operator*());
+  }
+  reference operator[](difference_type n) const {
+    return *(*this + n);
+  }
+  random_access_iterator &operator++() {
+    ++_current;
+    return (*this);
+  }
+  random_access_iterator operator++(int) {
+    random_access_iterator rv(*this);
+    ++(*this);
+    return rv;
+  }
+  random_access_iterator &operator--() {
+    --_current;
+    return (*this);
+  }
+  random_access_iterator operator--(int) {
+    random_access_iterator rv(*this);
+    --(*this);
+    return rv;
+  }
+  random_access_iterator operator+(difference_type n) const {
+    return random_access_iterator(_current + n);
+  }
+  random_access_iterator operator-(difference_type n) const {
+    return random_access_iterator(_current - n);
+  }
+  random_access_iterator &operator+=(difference_type n) {
+    _current += n;
+    return (*this);
+  }
+  random_access_iterator &operator-=(difference_type n) {
+    _current -= n;
+    return (*this);
+  }
+};
+
+template<class Iterator1, class Iterator2>
+bool operator==(const ft::random_access_iterator<Iterator1> &lhs,
+                const ft::random_access_iterator<Iterator2> &rhs) {
+  return lhs.base() == rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool operator!=(const ft::random_access_iterator<Iterator1> &lhs,
+                const ft::random_access_iterator<Iterator2> &rhs) {
+  return lhs.base() != rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool operator<(const ft::random_access_iterator<Iterator1> &lhs,
+               const ft::random_access_iterator<Iterator2> &rhs) {
+  return lhs.base() < rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool operator>(const ft::random_access_iterator<Iterator1> &lhs,
+               const ft::random_access_iterator<Iterator2> &rhs) {
+  return lhs.base() > rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool operator<=(const ft::random_access_iterator<Iterator1> &lhs,
+                const ft::random_access_iterator<Iterator2> &rhs) {
+  return lhs.base() <= rhs.base();
+}
+template<class Iterator1, class Iterator2>
+bool operator>=(const ft::random_access_iterator<Iterator1> &lhs,
+                const ft::random_access_iterator<Iterator2> &rhs) {
+  return lhs.base() >= rhs.base();
+}
+
+}; // ft
 
 #endif //FT_CONTAINERS_INCLUDES_FT_ITERATOR_HPP_
