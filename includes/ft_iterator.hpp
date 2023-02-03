@@ -197,8 +197,7 @@ class random_access_iterator
 
   random_access_iterator() : _current(NULL) {}
   random_access_iterator(pointer x) : _current(x) {}
-  random_access_iterator(const random_access_iterator &other) : _current(other
-                                                                             ._current) {}
+  random_access_iterator(const random_access_iterator &other) : _current(other._current) {}
   random_access_iterator &operator=(const random_access_iterator &other) {
     if (this == &other) {
       return (*this);
