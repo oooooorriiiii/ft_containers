@@ -22,7 +22,7 @@ void vdebug(T& V) {
 }
 
 void vector_construct_test() {
-  pout("vector_construct_test");
+  pout(__func__);
 
   std::allocator<int> alloc;
 
@@ -43,6 +43,22 @@ void vector_construct_test() {
   vdebug(v4);
 }
 
+void vector_copy_construct_test() {
+  pout(__func__);
+
+  ft::vector<int> v1(3, 1);
+  ft::vector<int> v2(v1);
+  ft::vector<int> v3;
+  ft::vector<int> v4(10, 42);
+  vdebug(v1);
+  vdebug(v2);
+  v3 = v2;
+  vdebug(v3);
+  v4 = v2;
+  vdebug(v4);
+}
+
 void vector_test() {
   vector_construct_test();
+  vector_copy_construct_test();
 }
