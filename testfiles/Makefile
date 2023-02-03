@@ -2,7 +2,7 @@ CXX = clang++
 CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD
 
 NAME = ft_containers_test
-SOURCES = tutorial.cpp
+SOURCES = ft_vector_test.cpp
 HEADERSROOT = ../includes
 HEADERS =	$(HEADERSROOT)/ft_algorithm.hpp \
 			$(HEADERSROOT)/ft_iterator.hpp \
