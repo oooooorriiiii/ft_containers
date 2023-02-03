@@ -102,8 +102,9 @@ class vector {
       if (capacity() >= r.size()) {
 //        std::copy(r.begin(), r.begin() + r.size(), begin());
         destroy_until(rend());
-        for (const_iterator src_iter = r.begin(), src_end = r.begin() + r.size();
-             src_iter != src_end; ++src_iter, ++last_) {
+        for (
+            const_iterator src_iter = r.begin(), src_end = r.begin() + r.size();
+            src_iter != src_end; ++src_iter, ++last_) {
           construct(last_, *src_iter);
         }
       } else {
@@ -252,6 +253,69 @@ class vector {
       reserve(sz);
       for (; last_ != reserved_last_; ++last_) {
         construct(last_, value);
+      }
+    }
+  }
+
+  /*
+   * assign
+   */
+
+  void assign(size_type count, const T &value) {
+    if (count > capacity()) {
+      clear();
+      deallocate();
+
+      first_ = allocate(count);
+      last_ = first_;
+      reserved_last_ = first_ + count;
+
+      for (size_type i = 0; i < count; ++i) {
+        construct(last_++, value);
+      }
+    } else if (count > size()) {
+      pointer ptr = first_;
+      for (size_type i = 0; i < count; ++i) {
+        if (i < size()) {
+          *(ptr++) = value;
+        } else {
+          construct(last_++, value);
+        }
+      }
+    } else {
+      clear();
+      for (size_type i = 0; i < count; ++i) {
+        construct(last_++, value);
+      }
+    }
+  }
+
+  template<class InputIterator>
+  void assign(InputIterator src_first, InputIterator src_last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
+    size_type count = src_last - src_first;
+    if (count > capacity()) {
+      clear();
+      deallocate();
+
+      first_ = allocate(count);
+      last_ = first_;
+      reserved_last_ = first_ + count;
+      for (InputIterator head = src_first; head != src_last; ++head) {
+        construct(last_++, *head);
+      }
+    } else if (count > size()) {
+      pointer ptr = first_;
+      for (size_type i = 0; i < count; ++i) {
+        if (i < size()) {
+          *(ptr++) = *src_first++;
+        } else {
+          construct(last_++, *src_first++);
+        }
+      }
+    } else {
+      clear();
+      for (InputIterator head = src_first; head != src_last; ++head) {
+        construct(last_++, *head);
       }
     }
   }
