@@ -15,12 +15,34 @@ template <class T>
 void vdebug(T& V) {
   std::cout << "size:" << V.size() << " capacity:" << V.capacity() << std::endl;
   std::cout << "{ ";
-  for (typename T::iterator iter = V.begint(); iter != V.end(); ++iter) {
+  for (typename T::iterator iter = V.begin(); iter != V.end(); ++iter) {
     std::cout << *iter << " ";
   }
   std::cout << "}" << std::endl;
 }
 
-void vector_test() {
+void vector_construct_test() {
+  pout("vector_construct_test");
 
+  std::allocator<int> alloc;
+
+  ft::vector<int> v0;
+  vdebug(v0);
+
+  ft::vector<int> v1(alloc);
+  vdebug(v1);
+
+  ft::vector<int> v2(5, 123, alloc);
+  vdebug(v2);
+
+  ft::vector<int> v3(v2.begin() + 1, v2.end());
+  vdebug(v3);
+
+  ft::vector<int> v4(v2);
+  v4[0] = 100;
+  vdebug(v4);
+}
+
+void vector_test() {
+  vector_construct_test();
 }
