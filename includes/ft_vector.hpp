@@ -146,11 +146,20 @@ class vector {
   }
 
   /*
-   *
+   * []
    */
 
-  reference operator[](size_type i) { return first_[i]; }
-  const_reference operator[](size_type i) const { return first_[i]; }
+  reference operator[](size_type i) {
+    return first_[i];
+  }
+  const_reference operator[](size_type i) const {
+    return first_[i];
+  }
+
+  /*
+   * at
+   */
+
   reference at(size_type i) {
     if (i >= size()) {
       throw std::out_of_range("index is out of range.");
@@ -165,31 +174,57 @@ class vector {
   }
 
   /*
-   *
+   * front, back
    */
 
-  reference front() { return *first_; }
-  const_reference front() const { return *first_; }
-  reference back() { return *(last_ - 1); }
-  const_reference back() const { return *(last_ - 1); }
+  reference front() {
+    return *first_;
+  }
+  const_reference front() const {
+    return *first_;
+  }
+  reference back() {
+    return *(last_ - 1);
+  }
+  const_reference back() const {
+    return *(last_ - 1);
+  }
 
   /*
-   *
+   * data
    */
 
-  pointer data() { return first_; }
-  const_pointer data() const { return first_; }
+  pointer data() {
+    return first_;
+  }
+  const_pointer data() const {
+    return first_;
+  }
 
   /*
    * iterator
+   *
+   * begin, end, rbegin, rend
    */
 
-  iterator begin() { return first_; }
-  iterator end() { return last_; }
-  const_iterator begin() const { return first_; }
-  const_iterator end() const { return last_; }
-  reverse_iterator rbegin() { return reverse_iterator(last_); }
-  reverse_iterator rend() { return reverse_iterator(first_); }
+  iterator begin() {
+    return first_;
+  }
+  iterator end() {
+    return last_;
+  }
+  const_iterator begin() const {
+    return first_;
+  }
+  const_iterator end() const {
+    return last_;
+  }
+  reverse_iterator rbegin() {
+    return reverse_iterator(last_);
+  }
+  reverse_iterator rend() {
+    return reverse_iterator(first_);
+  }
   const_reverse_iterator rbegin() const {
     return reverse_iterator(last_);
   }
@@ -198,10 +233,14 @@ class vector {
   }
 
   /*
-   *
+   * clear
    */
 
   void clear() { destroy_until(rend()); }
+
+  /*
+   * reserve
+   */
 
   void reserve(size_type sz) {
     if (sz <= capacity()) {
@@ -230,6 +269,10 @@ class vector {
 
     alloc_.deallocate(old_first, old_capacity);
   }
+
+  /*
+   * resize
+   */
 
   void resize(size_type sz) {
     if (sz < size()) {
@@ -291,7 +334,10 @@ class vector {
   }
 
   template<class InputIterator>
-  void assign(InputIterator src_first, InputIterator src_last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
+  void assign(InputIterator src_first,
+              InputIterator src_last,
+              typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+                                     InputIterator>::type * = NULL) {
     size_type count = src_last - src_first;
     if (count > capacity()) {
       clear();
