@@ -99,8 +99,10 @@ struct _is_integral_helper<unsigned long long> : public true_type {};
  *
  */
 
-template <typename T>
- struct is_integral : public _is_integral_helper<typename remove_cv<T>::type>::type {};
+template<typename T>
+struct is_integral
+    : public _is_integral_helper<typename remove_cv<T>::type>::type {
+};
 
 } // ft
 
