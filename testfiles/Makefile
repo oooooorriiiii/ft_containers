@@ -30,18 +30,18 @@ all: $(NAME)
 
 re: fclean all
 
-#test:
-#	$(CXX) $(CFLAGS) $(SRCS) -DTEST=0 -o $(NAME)
-#	@./$(NAME) > out_ft 2>err_ft
-#	$(CXX) $(CFLAGS) $(SRCS) -DTEST=1 -o $(NAME)
-#	@./$(NAME) > out_std 2>err_std
-# # ret(1) cause make error.  ||: force ret(0)
-#	diff out_ft out_std ||:
-#	@echo "---ft_err---"
-#	@cat err_ft
-#	@echo "---std_err---"
-#	@cat err_std
-#
+test:
+	$(CXX) $(CXXFLAGS) $(SOURCES) -DTEST=0 -o $(NAME)
+	@./$(NAME) > out_ft 2>err_ft
+	$(CXX) $(CXXFLAGS) $(SOURCES) -DTEST=1 -o $(NAME)
+	@./$(NAME) > out_std 2>err_std
+ # ret(1) cause make error.  ||: force ret(0)
+	diff out_ft out_std ||:
+	@echo "---ft_err---"
+	@cat err_ft
+	@echo "---std_err---"
+	@cat err_std
+
 #test0:
 #	$(CXX) $(CFLAGS) $(SRCS) -DTEST=0 -o $(NAME)
 #	@./$(NAME) > out_ft 2>err_ft
