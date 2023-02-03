@@ -24,6 +24,8 @@ class vector {
   typedef std::ptrdiff_t difference_type;
   typedef pointer iterator;
   typedef const_pointer const_iterator;
+//  typedef ft::random_access_iterator<value_type> iterator;
+//  typedef ft::random_access_iterator<const value_type> const_iterator;
   typedef std::reverse_iterator<iterator> reverse_iterator;
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -177,13 +179,13 @@ class vector {
   iterator end() const { return last_; }
   const_iterator cbegin() const { return first_; }
   const_iterator cend() const { return last_; }
-  reverse_iterator rbegin() { return reverse_iterator{last_}; }
+  reverse_iterator rbegin() { return reverse_iterator(last_); }
   const_reverse_iterator rbegin() const {
-    return reverse_iterator{last_};
+    return reverse_iterator(last_);
   }
-  reverse_iterator rend() { return reverse_iterator{first_}; }
+  reverse_iterator rend() { return reverse_iterator(first_); }
   const_reverse_iterator rend() const {
-    return reverse_iterator{first_};
+    return reverse_iterator(first_);
   }
 
   /*
@@ -208,7 +210,7 @@ class vector {
     reserved_last_ = first_ + sz;
 
     for (pointer old_iter = old_first; old_iter != old_last; ++old_iter, ++last_) {
-      construct(last_, std::move(*old_iter));
+      construct(last_, *old_iter);
     }
 
     for (reverse_iterator r_iter = reverse_iterator(old_last),
