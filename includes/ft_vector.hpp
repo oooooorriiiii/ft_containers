@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "utils.hpp"
+#include "ft_iterator.hpp"
 
 namespace ft {
 template<class T, class Allocator = std::allocator<T> >
@@ -22,10 +23,10 @@ class vector {
   typedef Allocator allocator_type;
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
-  typedef pointer iterator;
-  typedef const_pointer const_iterator;
-//  typedef ft::random_access_iterator<value_type> iterator;
-//  typedef ft::random_access_iterator<const value_type> const_iterator;
+//  typedef pointer iterator;
+//  typedef const_pointer const_iterator;
+  typedef ft::random_access_iterator<value_type> iterator;
+  typedef ft::random_access_iterator<const value_type> const_iterator;
   typedef std::reverse_iterator<iterator> reverse_iterator;
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -54,7 +55,7 @@ class vector {
                                 InputIterator>::type * = NULL) : first_(
       NULL), last_(NULL), reserved_last_(NULL), alloc_(allocator) {
     reserve(std::distance(first, last));
-    for (pointer i = first; i != last; ++i) {
+    for (InputIterator i = first; i != last; ++i) {
       push_back(*i);
     }
   }
@@ -78,7 +79,8 @@ class vector {
         reserved_last_(NULL),
         alloc_(r.alloc_) {
     reserve(r.size());
-    for (pointer dest = first_, src = r.begin(), last = r.end(); src != last;
+    pointer dest = first_;
+    for (const_iterator src = r.begin(), last = r.end(); src != last;
          ++dest, ++src) {
       construct(dest, *src);
     }
@@ -96,19 +98,21 @@ class vector {
 
     if (size() == r.size()) {
       std::copy(r.begin(), r.end(), begin());
-    } else if (capacity() >= r.size()) {
-      std::copy(r.begin(), r.begin() + r.size(), begin());
-      for (const_iterator src_iter = r.begin() + r.size(), src_end = r.end();
-           src_iter != src_end; ++src_iter, ++last_) {
-        construct(last_, *src_iter);
-      }
     } else {
-      destroy_until(rbegin());
-      reserve(r.size());
-      for (const_iterator src_iter = r.begin(), src_end = r.end(),
-               dest_iter = begin();
-           src_iter != src_end; ++dest_iter, ++last_) {
-        construct(dest_iter, *src_iter);
+      if (capacity() >= r.size()) {
+//        std::copy(r.begin(), r.begin() + r.size(), begin());
+        destroy_until(rend());
+        for (const_iterator src_iter = r.begin(), src_end = r.begin() + r.size();
+             src_iter != src_end; ++src_iter, ++last_) {
+          construct(last_, *src_iter);
+        }
+      } else {
+        destroy_until(rend());
+        reserve(r.size());
+        for (const_iterator src_iter = r.begin(), src_end = r.end();
+             src_iter != src_end; ++src_iter, ++last_) {
+          construct(last_, *src_iter);
+        }
       }
     }
     return *this;
@@ -118,7 +122,7 @@ class vector {
    *
    */
 
-  size_type size() const { return end() - begin(); }
+  size_type size() const { return std::distance(first_, last_); }
   bool empty() const { return begin() == end(); }
   size_type capacity() const { return reserved_last_ - first_; }
 
@@ -180,16 +184,14 @@ class vector {
    */
 
   iterator begin() { return first_; }
-  iterator begin() const { return first_; }
   iterator end() { return last_; }
-  iterator end() const { return last_; }
-  const_iterator cbegin() const { return first_; }
-  const_iterator cend() const { return last_; }
+  const_iterator begin() const { return first_; }
+  const_iterator end() const { return last_; }
   reverse_iterator rbegin() { return reverse_iterator(last_); }
+  reverse_iterator rend() { return reverse_iterator(first_); }
   const_reverse_iterator rbegin() const {
     return reverse_iterator(last_);
   }
-  reverse_iterator rend() { return reverse_iterator(first_); }
   const_reverse_iterator rend() const {
     return reverse_iterator(first_);
   }
