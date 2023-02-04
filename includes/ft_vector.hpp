@@ -159,6 +159,10 @@ class vector {
     ++last_;
   }
 
+  void pop_back() {
+    alloc_.destroy(--last_);
+  }
+
   /*
    * []
    */
