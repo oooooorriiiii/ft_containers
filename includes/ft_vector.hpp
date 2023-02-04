@@ -147,11 +147,15 @@ class vector {
 
   void push_back(const_reference value) {
     if (size() + 1 > capacity()) {
-      size_type c = size();
-      if (c == size()) {
+      size_type c = capacity();
+      size_type prev_cap = c;
+      if (c == 0) {
         c = 1;
       } else {
         c *= 2;
+        if (prev_cap != c / 2) {
+          c = prev_cap + 1;
+        }
       }
       reserve(c);
     }
