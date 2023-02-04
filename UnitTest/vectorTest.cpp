@@ -47,6 +47,56 @@ TEST(VectorTest, PopBack) {
   EXPECT_THROW(std_vec.at(2), std::out_of_range);
 }
 
+TEST(VectorTest, Insert) {
+  // FT
+  ft::vector<int> ft_v(3, 100);
+  ft::vector<int>::iterator ft_iter;
+  ft_iter = ft_v.begin(); // 100<- 100 100
+//  std::cerr << "ft_iter: " << *ft_v.begin() << std::endl;
+//  std::cerr << "ft_iter: " << *ft_iter << std::endl;
+  ft_iter = ft_v.insert(ft_iter, 200); // 200<- 100 100 100
+  ft_v.insert(ft_iter, 2, 300); // 300<- 300 200 100 100 100
+  ft_iter = ft_v.begin(); // 300<- 300 200 100 100 100
+//  std::vector<int> ft_another_v(2, 400);
+//  ft_v.insert(ft_iter + 2, ft_another_v.begin(), ft_another_v.end()); // 300 300 400 400 200 100 100 100
+//
+//  int ft_arr[] = {501, 502, 503};
+//  ft_v.insert(ft_v.begin(), ft_arr, ft_arr + 3); // 501 502 503 300 300 400 400 200 100 100 100
+
+  std::cout << "ft_v: ";
+  for (ft_iter = ft_v.begin(); ft_iter < ft_v.end(); ft_iter++) {
+    std::cout << ' ' << *ft_iter;
+  }
+  std::cout << std::endl;
+
+  // STL
+  std::vector<int> std_v(3, 100); // 100 100 100
+  std::vector<int>::iterator iter;
+  iter = std_v.begin(); // 100<- 100 100
+  std::cerr << "std_iter: " << *iter << std::endl;
+  iter = std_v.insert(iter, 200); // 200<- 100 100 100
+  std_v.insert(iter, 2, 300); // 300<- 300 200 100 100 100
+  iter = std_v.begin(); // 300<- 300 200 100 100 100
+//  std::vector<int> std_another_v(2, 400);
+//  std_v.insert(iter + 2, std_another_v.begin(), std_another_v.end()); // 300 300 400 400 200 100 100 100
+//
+//  int myarray[] = {501, 502, 503};
+//  std_v.insert(std_v.begin(), myarray, myarray + 3); // 501 502 503 300 300 400 400 200 100 100 100
+
+  std::cout << "std_v: ";
+  for (iter = std_v.begin(); iter < std_v.end(); iter++) {
+    std::cout << ' ' << *iter;
+  }
+  std::cout << std::endl;
+
+  // TEST
+  for (int i = 0; i < std_v.size(); i++) {
+    EXPECT_EQ(ft_v.at(i), std_v.at(i));
+  }
+    EXPECT_EQ(ft_v.at(3), std_v.at(3));
+  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
+}
+
 TEST(VectorTest, Clear) {
   ft::vector<int> ft_v;
   ft_v.push_back(1);

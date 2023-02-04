@@ -251,10 +251,43 @@ class vector {
   }
 
   /*
-   * clear
+   * List processing
+   * - insert
+   * - erase
+   * - clear
    */
 
-  void clear() { destroy_until(rend()); }
+  iterator insert(iterator position, const value_type &val) {
+    size_type offset = std::distance(begin(), position);
+    insert(position, 1, val);
+    return begin() + offset;
+  }
+
+  void insert(iterator position, size_type n, const value_type &val) {
+    size_type offset = std::distance(begin(), position);
+    size_type new_size = size() + n;
+
+    if (new_size <= capacity()) {
+      expand_capacity_(new_size);
+    }
+    for (pointer new_last = first_ + new_size; last_ != new_last; ++last_) {
+      construct(last_);
+    }
+    iterator iter = begin() + offset;
+    reverse_iterator r_end = reverse_iterator(iter);
+    reverse_iterator r_src = reverse_iterator(iterator(last_ - n));
+    reverse_iterator r_dest = rbegin();
+    for (; r_src != r_end; r_src++, r_dest++) {
+      *r_dest = *r_src;
+    }
+    for (size_type i = 0; i < n; i++, iter++) {
+      *iter = val;
+    }
+  }
+
+  void clear() {
+    destroy_until(rend());
+  }
 
   /*
    * reserve
@@ -419,6 +452,27 @@ class vector {
          ++r_iter, --last_) {
       destroy(&(*r_iter));
     }
+  }
+
+  /**
+   * @brief If need expand capacity, expand capacity
+   */
+  void expand_capacity_(size_type sz) {
+    size_type cap = capacity();
+    size_type prev_cap = cap;
+
+    while (sz > cap) {
+      if (cap == 0) {
+        cap = 1;
+      } else {
+        cap *= 2;
+        if (prev_cap != cap / 2) {
+          throw std::overflow_error("too long");
+        }
+      }
+      prev_cap = cap;
+    }
+    reserve(cap);
   }
 };
 
