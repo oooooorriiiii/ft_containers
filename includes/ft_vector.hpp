@@ -7,6 +7,7 @@
 
 #include <cstddef> // NULL
 #include <memory>
+#include <limits> // std::min
 
 #include "utils.hpp"
 #include "ft_iterator.hpp"
@@ -123,9 +124,22 @@ class vector {
    *
    */
 
-  size_type size() const { return std::distance(first_, last_); }
-  bool empty() const { return begin() == end(); }
-  size_type capacity() const { return reserved_last_ - first_; }
+  size_type size() const {
+    return std::distance(first_, last_);
+  }
+
+  bool empty() const {
+    return begin() == end();
+  }
+
+  size_type capacity() const {
+    return reserved_last_ - first_;
+  }
+
+  size_type max_size() const {
+    return std::min<size_type>(alloc_.max_size(),
+                               std::numeric_limits<difference_type>::max());
+  }
 
   /*
    *

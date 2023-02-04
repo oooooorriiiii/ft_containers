@@ -7,7 +7,7 @@
 
 template <typename T>
 void pout(T s) {
-  static int no;
+//  static int no;
   std::cout << std::endl;
   std::cout << "===[" << "]:" << s << "===" << std::endl;
 }
