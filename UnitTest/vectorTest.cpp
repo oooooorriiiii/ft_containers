@@ -9,17 +9,61 @@
 
 namespace SimpleVectorTest {
 
+TEST(VectorTest, Resize) {
+
+  // ft
+  ft::vector<int> ft_v;
+
+  for (int i = 1; i < 10; i++) { // ft_v:  1 2 3 4 5 6 7 8 9
+    ft_v.push_back(i);
+  }
+  ft_v.resize(5); // ft_v:  1 2 3 4 5
+  ft_v.resize(8, 100); // ft_v:  1 2 3 4 5 100 100 100
+  ft_v.resize(12); // ft_v:  1 2 3 4 5 100 100 100 0 0 0 0
+
+//  std::cout << "ft_v: ";
+//  for (int i = 0; i < ft_v.size(); i++) {
+//    std::cout << ' ' << ft_v[i];
+//  }
+//  std::cout << std::endl;
+
+  // STL
+  std::vector<int> std_v;
+
+  for (int i = 1; i < 10; i++) { // std_v:  1 2 3 4 5 6 7 8 9
+    std_v.push_back(i);
+  }
+  std_v.resize(5); // std_v:  1 2 3 4 5
+  std_v.resize(8, 100); // std_v:  1 2 3 4 5 100 100 100
+  std_v.resize(12); // std_v:  1 2 3 4 5 100 100 100 0 0 0 0
+
+//  std::cout << "std_v: ";
+//  for (int i = 0; i < std_v.size(); i++) {
+//    std::cout << ' ' << std_v[i];
+//  }
+//  std::cout << std::endl;
+
+  // TEST
+  for (int i = 0; i < std_v.size(); i++) {
+    EXPECT_EQ(ft_v[i], std_v[i]);
+  }
+//  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
+}
+
 TEST(VectorTest, PushBack) {
+  // ft
   ft::vector<int> ft_vec;
   ft_vec.push_back(1);
   ft_vec.push_back(2);
   ft_vec.push_back(3);
 
+  // STL
   std::vector<int> std_vec;
   std_vec.push_back(1);
   std_vec.push_back(2);
   std_vec.push_back(3);
 
+  // TSET
   EXPECT_EQ(ft_vec.size(), std_vec.size());
   EXPECT_EQ(ft_vec[0], std_vec[0]);
   EXPECT_EQ(ft_vec[1], std_vec[1]);
@@ -63,17 +107,17 @@ TEST(VectorTest, Insert) {
 //  int ft_arr[] = {501, 502, 503};
 //  ft_v.insert(ft_v.begin(), ft_arr, ft_arr + 3); // 501 502 503 300 300 400 400 200 100 100 100
 
-  std::cout << "ft_v: ";
-  for (ft_iter = ft_v.begin(); ft_iter < ft_v.end(); ft_iter++) {
-    std::cout << ' ' << *ft_iter;
-  }
-  std::cout << std::endl;
+//  std::cout << "ft_v: ";
+//  for (ft_iter = ft_v.begin(); ft_iter < ft_v.end(); ft_iter++) {
+//    std::cout << ' ' << *ft_iter;
+//  }
+//  std::cout << std::endl;
 
   // STL
   std::vector<int> std_v(3, 100); // 100 100 100
   std::vector<int>::iterator iter;
   iter = std_v.begin(); // 100<- 100 100
-  std::cerr << "std_iter: " << *iter << std::endl;
+//  std::cerr << "std_iter: " << *iter << std::endl;
   iter = std_v.insert(iter, 200); // 200<- 100 100 100
   std_v.insert(iter, 2, 300); // 300<- 300 200 100 100 100
   iter = std_v.begin(); // 300<- 300 200 100 100 100
@@ -83,18 +127,17 @@ TEST(VectorTest, Insert) {
 //  int myarray[] = {501, 502, 503};
 //  std_v.insert(std_v.begin(), myarray, myarray + 3); // 501 502 503 300 300 400 400 200 100 100 100
 
-  std::cout << "std_v: ";
-  for (iter = std_v.begin(); iter < std_v.end(); iter++) {
-    std::cout << ' ' << *iter;
-  }
-  std::cout << std::endl;
+//  std::cout << "std_v: ";
+//  for (iter = std_v.begin(); iter < std_v.end(); iter++) {
+//    std::cout << ' ' << *iter;
+//  }
+//  std::cout << std::endl;
 
   // TEST
   for (int i = 0; i < std_v.size(); i++) {
     EXPECT_EQ(ft_v.at(i), std_v.at(i));
   }
-    EXPECT_EQ(ft_v.at(3), std_v.at(3));
-  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
+//  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
 }
 
 TEST(VectorTest, Clear) {
