@@ -199,12 +199,13 @@ class random_access_iterator
   random_access_iterator() : _current(NULL) {}
   random_access_iterator(pointer x) : _current(x) {}
   random_access_iterator(const random_access_iterator &other) : _current(other._current) {}
-  random_access_iterator &operator=(const random_access_iterator &other) {
+  template<class U>
+  random_access_iterator &operator=(const random_access_iterator<U> &other) {
     if (this == &other) {
-      return (*this);
+      return *this;
     }
-    _current == other._current;
-    return (*this);
+    _current == other.base();
+    return *this;
   }
   ~random_access_iterator() {}
 
