@@ -459,20 +459,25 @@ class vector {
    */
   void expand_capacity_(size_type sz) {
     size_type cap = capacity();
-    size_type prev_cap = cap;
 
     while (sz > cap) {
-      if (cap == 0) {
+      if (cap == 0 && sz == 1) {
         cap = 1;
       } else {
-        cap *= 2;
-        if (prev_cap != cap / 2) {
-          throw std::overflow_error("too long");
+        if (cap <= sz / 2) {
+          cap = sz;
+          if (cap > max_size()) {
+            throw std::overflow_error("too long");
+          }
+        } else {
+          if (cap >= (max_size() / 2)) {
+            throw std::overflow_error("too long");
+          }
         }
+        cap *= 2;
       }
-      prev_cap = cap;
     }
-    reserve(cap);
+    resize(cap);
   }
 };
 
