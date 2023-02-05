@@ -8,12 +8,12 @@
 #include <cstddef>
 
 namespace ft {
-struct input_iterator_tag {};
-struct output_iterator_tag {};
-struct forward_iterator_tag : public input_iterator_tag {};
-struct bidirectional_iterator_tag : public forward_iterator_tag {};
-struct random_access_iterator_tag : public bidirectional_iterator_tag,
-                                    public std::input_iterator_tag {};
+//struct input_iterator_tag {};
+//struct output_iterator_tag {};
+//struct forward_iterator_tag : public input_iterator_tag {};
+//struct bidirectional_iterator_tag : public forward_iterator_tag {};
+//struct random_access_iterator_tag : public bidirectional_iterator_tag,
+//                                    public std::input_iterator_tag {};
 
 template<class Iterator>
 struct iterator_traits {
@@ -30,7 +30,7 @@ struct iterator_traits<T *> {
   typedef T value_type;
   typedef T *pointer;
   typedef T &reference;
-  typedef ft::random_access_iterator_tag iterator_category;
+  typedef std::random_access_iterator_tag iterator_category;
 };
 
 template<class T>
@@ -39,7 +39,7 @@ struct iterator_traits<const T *> {
   typedef T value_type;
   typedef T *pointer;
   typedef T &reference;
-  typedef ft::random_access_iterator_tag iterator_category;
+  typedef std::random_access_iterator_tag iterator_category;
 };
 
 template<class Category, class T, class Distance = std::ptrdiff_t, class Pointer = T *, class Reference = T &>
@@ -182,23 +182,24 @@ bool operator>=(const ft::reverse_iterator<Iterator1> &lhs,
 
 template<class T>
 class random_access_iterator
-    : public ft::iterator<ft::random_access_iterator_tag, T> {
+    : public ft::iterator<std::random_access_iterator_tag, T> {
  protected:
   T *_current;
 
  public:
-  typedef typename ft::iterator<ft::random_access_iterator_tag,
+  typedef typename ft::iterator<std::random_access_iterator_tag,
                                 T>::iterator_category iterator_category;
-  typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type
+  typedef typename ft::iterator<std::random_access_iterator_tag, T>::value_type
       value_type;
-  typedef typename ft::iterator<ft::random_access_iterator_tag,
+  typedef typename ft::iterator<std::random_access_iterator_tag,
                                 T>::difference_type difference_type;
   typedef T *pointer;
   typedef T &reference;
 
   random_access_iterator() : _current(NULL) {}
   random_access_iterator(pointer x) : _current(x) {}
-  random_access_iterator(const random_access_iterator &other) : _current(other._current) {}
+  template<class U>
+  random_access_iterator(const random_access_iterator<U> &other) : _current(other.base()) {}
   template<class U>
   random_access_iterator &operator=(const random_access_iterator<U> &other) {
     if (this == &other) {
@@ -294,6 +295,22 @@ bool operator>=(const ft::random_access_iterator<Iterator1> &lhs,
                 const ft::random_access_iterator<Iterator2> &rhs) {
   return lhs.base() >= rhs.base();
 }
+
+template <class Iterator>
+ft::random_access_iterator<Iterator> operator+(
+    typename random_access_iterator<Iterator>::difference_type n,
+    const random_access_iterator<Iterator> &iter) {
+  random_access_iterator<Iterator>(iter.base() + n);
+  return iter + n;
+}
+
+template <class Iterator>
+typename random_access_iterator<Iterator>::difference_type operator-(
+    const random_access_iterator<Iterator> &lhs,
+    const random_access_iterator<Iterator> &rhs) {
+  return lhs.base() - rhs.base();
+}
+
 
 }; // ft
 
