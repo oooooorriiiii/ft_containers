@@ -178,6 +178,30 @@ TEST_F(VectorTest, assign) {
   EXPECT_EQ(ft_characters.at(5), std_characters.at(5));
 }
 
+TEST_F(VectorTest, swap) {
+  // ft
+  ft::vector<int> ft_foo (3, 100);   // three ints with a value of 100
+  ft::vector<int> ft_bar (5, 200);   // five ints with a value of 200
+
+  ft_foo.swap(ft_bar);
+
+  // STL
+  std::vector<int> std_foo (3, 100);   // three ints with a value of 100
+  std::vector<int> std_bar (5, 200);   // five ints with a value of 200
+
+  std_foo.swap(std_bar);
+
+  // TEST
+  for (int i = 0; i < std_foo.size(); i++) {
+    EXPECT_EQ(ft_foo.at(i), std_foo.at(i));
+  }
+  for (int i = 0; i < std_bar.size(); i++) {
+    EXPECT_EQ(ft_bar.at(i), std_bar.at(i));
+  }
+  EXPECT_EQ(ft_foo.capacity(), std_foo.capacity());
+  EXPECT_EQ(ft_bar.capacity(), std_bar.capacity());
+}
+
 TEST_F(VectorTest, brackets) {
   ft::vector<int> ft_numbers(4);
   for (int i = 0; i < 4; ++i) {

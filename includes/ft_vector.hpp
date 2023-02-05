@@ -314,6 +314,15 @@ class vector {
 
   /*****************************************************************************
    * Modifiers
+   * - assign
+   * - push_back
+   * - pop_back
+   * - swap
+   *
+   * List processing
+   * - insert
+   * - erase
+   * - clear
    ****************************************************************************/
 
   /*
@@ -380,6 +389,23 @@ class vector {
         construct(last_++, *head);
       }
     }
+  }
+
+  /*
+   * swap
+   */
+
+  void swap(vector& x) {
+    pointer tmp_first = x.first_;
+    pointer tmp_last = x.last_;
+    pointer tmp_reserved_last = x.reserved_last_;
+
+    x.first_ = first_;
+    x.last_ = last_;
+    x.reserved_last_ = reserved_last_;
+    first_ = tmp_first;
+    last_ = tmp_last;
+    reserved_last_ = tmp_reserved_last;
   }
 
   /*
