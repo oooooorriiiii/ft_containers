@@ -254,7 +254,6 @@ class vector {
     return reverse_iterator(first_);
   }
 
-
   /*
    * reserve
    */
@@ -280,7 +279,8 @@ class vector {
     }
 
     for (reverse_iterator r_iter = reverse_iterator(iterator(old_last)),
-             r_end = reverse_iterator(iterator(old_first)); r_iter != r_end; ++r_iter) {
+             r_end = reverse_iterator(iterator(old_first)); r_iter != r_end;
+         ++r_iter) {
       destroy(&(*r_iter));
     }
 
@@ -395,7 +395,7 @@ class vector {
    * swap
    */
 
-  void swap(vector& x) {
+  void swap(vector &x) {
     pointer tmp_first = x.first_;
     pointer tmp_last = x.last_;
     pointer tmp_reserved_last = x.reserved_last_;
@@ -427,7 +427,7 @@ class vector {
 
   void insert(iterator position, size_type n, const value_type &val) {
     if (n == 0) {
-      return ;
+      return;
     }
     size_type offset = std::distance(begin(), position);
     size_type new_size = size() + n;
@@ -447,7 +447,8 @@ class vector {
 
   template<class InputIterator>
   void insert(iterator position, InputIterator first, InputIterator last,
-              typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
+              typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+                                     InputIterator>::type * = NULL) {
     size_type offset = std::distance(first, last);
     difference_type position_distance = std::distance(begin(), position);
     size_type new_size = size() + offset;
