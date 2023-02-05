@@ -51,7 +51,7 @@ TEST_F(VectorTest, Resize) {
   for (int i = 0; i < std_v.size(); i++) {
     EXPECT_EQ(ft_v.at(i), std_v.at(i));
   }
-//  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
+  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
 }
 
 TEST_F(VectorTest, Resize2) {
@@ -180,16 +180,16 @@ TEST_F(VectorTest, assign) {
 
 TEST_F(VectorTest, brackets) {
   ft::vector<int> ft_numbers(4);
-//  for (int i = 0; i < 4; ++i) {
-//    ft_numbers[i] = (i + 1) * 2;
-//  }
+  for (int i = 0; i < 4; ++i) {
+    ft_numbers[i] = (i + 1) * 2;
+  }
 
   std::vector<int> std_numbers(4);
   for (int i = 0; i < 4; ++i) {
     std_numbers[i] = (i + 1) * 2;
   }
 
-//  EXPECT_EQ(ft_numbers.at(2), std_numbers.at(2));
+  EXPECT_EQ(ft_numbers.at(2), std_numbers.at(2));
 }
 
 TEST_F(VectorTest, AtMethodThrowsOutOfRange) {
@@ -219,41 +219,5 @@ TEST_F(VectorTest, MaxSize) {
 //  std::cout << "max_size(): " << ft_v.max_size() << std::endl;
   EXPECT_EQ(ft_v.max_size(), std_v.max_size());
 }
-
-
-//TEST(VectorTest, PopBack) {
-//  ft::vector<int> v;
-//  v.push_back(1);
-//  v.push_back(2);
-//  v.push_back(3);
-//  v.pop_back();
-//  EXPECT_EQ(v.size(), 2);
-//  EXPECT_EQ(v[0], 1);
-//  EXPECT_EQ(v[1], 2);
-//}
-
-//TEST(VectorTest, Insert) {
-//  ft::vector<int> v;
-//  v.push_back(1);
-//  v.push_back(2);
-//  v.push_back(3);
-//  v.insert(v.begin() + 1, 4);
-//  EXPECT_EQ(v.size(), 4);
-//  EXPECT_EQ(v[0], 1);
-//  EXPECT_EQ(v[1], 4);
-//  EXPECT_EQ(v[2], 2);
-//  EXPECT_EQ(v[3], 3);
-//}
-
-//TEST(VectorTest, Erase) {
-//  ft::vector<int> v;
-//  v.push_back(1);
-//  v.push_back(2);
-//  v.push_back(3);
-//  v.erase(v.begin() + 1);
-//  EXPECT_EQ(v.size(), 2);
-//  EXPECT_EQ(v[0], 1);
-//  EXPECT_EQ(v[1], 3);
-//}
 
 }
