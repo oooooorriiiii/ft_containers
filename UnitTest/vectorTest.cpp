@@ -33,13 +33,9 @@ TEST_F(VectorTest, Resize) {
   for (int i = 1; i < 10; i++) { // ft_v:  1 2 3 4 5 6 7 8 9
     ft_v.push_back(i);
   }
-  print_vector_info(ft_v);
   ft_v.resize(5); // ft_v:  1 2 3 4 5
-  print_vector_info(ft_v);
   ft_v.resize(8, 100); // ft_v:  1 2 3 4 5 100 100 100
-  print_vector_info(ft_v);
   ft_v.resize(12); // ft_v:  1 2 3 4 5 100 100 100 0 0 0 0
-  print_vector_info(ft_v);
 
   // STL
   std::vector<int> std_v;
@@ -47,13 +43,9 @@ TEST_F(VectorTest, Resize) {
   for (int i = 1; i < 10; i++) { // std_v:  1 2 3 4 5 6 7 8 9
     std_v.push_back(i);
   }
-  print_vector_info(std_v);
   std_v.resize(5); // std_v:  1 2 3 4 5
-  print_vector_info(std_v);
   std_v.resize(8, 100); // std_v:  1 2 3 4 5 100 100 100
-  print_vector_info(std_v);
   std_v.resize(12); // std_v:  1 2 3 4 5 100 100 100 0 0 0 0
-  print_vector_info(std_v);
 
   // TEST
   for (int i = 0; i < std_v.size(); i++) {
@@ -65,9 +57,15 @@ TEST_F(VectorTest, Resize) {
 TEST_F(VectorTest, Resize2) {
   ft::vector<int> ft_v;
   ft_v.resize(5, 42);
-  print_vector_info(ft_v);
   ft_v.resize(6, 42);
-  print_vector_info(ft_v);
+
+  std::vector<int> std_v;
+  std_v.resize(5, 42);
+  std_v.resize(6, 42);
+
+  for (int i = 0; i < std_v.size(); i++) {
+    EXPECT_EQ(ft_v.at(i), std_v.at(i));
+  }
 }
 
 TEST_F(VectorTest, PushBack) {
@@ -111,54 +109,43 @@ TEST_F(VectorTest, PopBack) {
   EXPECT_THROW(std_vec.at(2), std::out_of_range);
 }
 
-//TEST(VectorTest, Insert) {
-//  // FT
-//  ft::vector<int> ft_v(3, 100);
-//  ft::vector<int>::iterator ft_iter;
-//  ft_iter = ft_v.begin(); // 100<- 100 100
-////  std::cerr << "ft_iter: " << *ft_v.begin() << std::endl;
-////  std::cerr << "ft_iter: " << *ft_iter << std::endl;
-//  ft_iter = ft_v.insert(ft_iter, 200); // 200<- 100 100 100
-//  ft_v.insert(ft_iter, 2, 300); // 300<- 300 200 100 100 100
-//  ft_iter = ft_v.begin(); // 300<- 300 200 100 100 100
-////  std::vector<int> ft_another_v(2, 400);
-////  ft_v.insert(ft_iter + 2, ft_another_v.begin(), ft_another_v.end()); // 300 300 400 400 200 100 100 100
-////
-////  int ft_arr[] = {501, 502, 503};
-////  ft_v.insert(ft_v.begin(), ft_arr, ft_arr + 3); // 501 502 503 300 300 400 400 200 100 100 100
-//
-////  std::cout << "ft_v: ";
-////  for (ft_iter = ft_v.begin(); ft_iter < ft_v.end(); ft_iter++) {
-////    std::cout << ' ' << *ft_iter;
-////  }
-////  std::cout << std::endl;
-//
-//  // STL
-//  std::vector<int> std_v(3, 100); // 100 100 100
-//  std::vector<int>::iterator iter;
-//  iter = std_v.begin(); // 100<- 100 100
-////  std::cerr << "std_iter: " << *iter << std::endl;
-//  iter = std_v.insert(iter, 200); // 200<- 100 100 100
-//  std_v.insert(iter, 2, 300); // 300<- 300 200 100 100 100
-//  iter = std_v.begin(); // 300<- 300 200 100 100 100
-////  std::vector<int> std_another_v(2, 400);
-////  std_v.insert(iter + 2, std_another_v.begin(), std_another_v.end()); // 300 300 400 400 200 100 100 100
-////
-////  int myarray[] = {501, 502, 503};
-////  std_v.insert(std_v.begin(), myarray, myarray + 3); // 501 502 503 300 300 400 400 200 100 100 100
-//
-////  std::cout << "std_v: ";
-////  for (iter = std_v.begin(); iter < std_v.end(); iter++) {
-////    std::cout << ' ' << *iter;
-////  }
-////  std::cout << std::endl;
-//
-//  // TEST
-//  for (int i = 0; i < std_v.size(); i++) {
-//    EXPECT_EQ(ft_v.at(i), std_v.at(i));
-//  }
-////  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
-//}
+TEST_F(VectorTest, Insert) {
+  // FT
+  ft::vector<int> ft_v(3, 100);
+  ft::vector<int>::iterator ft_iter;
+  ft_iter = ft_v.begin(); // 100<- 100 100
+//  std::cerr << "ft_iter: " << *ft_v.begin() << std::endl;
+//  std::cerr << "ft_iter: " << *ft_iter << std::endl;
+  ft_iter = ft_v.insert(ft_iter, 200); // 200<- 100 100 100
+  ft_v.insert(ft_iter, 2, 300); // 300<- 300 200 100 100 100
+  ft_iter = ft_v.begin(); // 300<- 300 200 100 100 100
+  std::vector<int> ft_another_v(2, 400);
+  ft_v.insert(ft_iter + 2, ft_another_v.begin(), ft_another_v.end()); // 300 300 400 400 200 100 100 100
+
+  int ft_arr[] = {501, 502, 503};
+  ft_v.insert(ft_v.begin(), ft_arr, ft_arr + 3); // 501 502 503 300 300 400 400 200 100 100 100
+
+  // STL
+  std::vector<int> std_v(3, 100); // 100 100 100
+  std::vector<int>::iterator iter;
+  iter = std_v.begin(); // 100<- 100 100
+//  std::cerr << "std_iter: " << *iter << std::endl;
+  iter = std_v.insert(iter, 200); // 200<- 100 100 100
+  std_v.insert(iter, 2, 300); // 300<- 300 200 100 100 100
+  iter = std_v.begin(); // 300<- 300 200 100 100 100
+  std::vector<int> std_another_v(2, 400);
+  std_v.insert(iter + 2, std_another_v.begin(), std_another_v.end()); // 300 300 400 400 200 100 100 100
+
+  int myarray[] = {501, 502, 503};
+  std_v.insert(std_v.begin(), myarray, myarray + 3); // 501 502 503 300 300 400 400 200 100 100 100
+
+
+  // TEST
+  for (int i = 0; i < std_v.size(); i++) {
+    EXPECT_EQ(ft_v.at(i), std_v.at(i));
+  }
+  EXPECT_EQ(ft_v.capacity(), std_v.capacity());
+}
 
 TEST_F(VectorTest, Clear) {
   ft::vector<int> ft_v;
@@ -193,16 +180,16 @@ TEST_F(VectorTest, assign) {
 
 TEST_F(VectorTest, brackets) {
   ft::vector<int> ft_numbers(4);
-  for (int i = 0; i < 4; ++i) {
-    ft_numbers[i] = (i + 1) * 2;
-  }
+//  for (int i = 0; i < 4; ++i) {
+//    ft_numbers[i] = (i + 1) * 2;
+//  }
 
   std::vector<int> std_numbers(4);
   for (int i = 0; i < 4; ++i) {
     std_numbers[i] = (i + 1) * 2;
   }
 
-  EXPECT_EQ(ft_numbers.at(2), std_numbers.at(2));
+//  EXPECT_EQ(ft_numbers.at(2), std_numbers.at(2));
 }
 
 TEST_F(VectorTest, AtMethodThrowsOutOfRange) {

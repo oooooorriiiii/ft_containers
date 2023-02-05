@@ -254,44 +254,6 @@ class vector {
     return reverse_iterator(first_);
   }
 
-  /*
-   * List processing
-   * - insert
-   * - erase
-   * - clear
-   */
-
-  iterator insert(iterator position, const value_type &val) {
-    size_type offset = std::distance(begin(), position);
-    insert(position, 1, val);
-    return begin() + offset;
-  }
-
-  void insert(iterator position, size_type n, const value_type &val) {
-    size_type offset = std::distance(begin(), position);
-    size_type new_size = size() + n;
-
-    if (new_size <= capacity()) {
-      expand_capacity_(new_size);
-    }
-    for (pointer new_last = first_ + new_size; last_ != new_last; ++last_) {
-      construct(last_);
-    }
-    iterator iter = begin() + offset;
-    reverse_iterator r_end = reverse_iterator(iter);
-    reverse_iterator r_src = reverse_iterator(iterator(last_ - n));
-    reverse_iterator r_dest = rbegin();
-    for (; r_src != r_end; r_src++, r_dest++) {
-      *r_dest = *r_src;
-    }
-    for (size_type i = 0; i < n; i++, iter++) {
-      *iter = val;
-    }
-  }
-
-  void clear() {
-    destroy_until(rend());
-  }
 
   /*
    * reserve
@@ -317,8 +279,8 @@ class vector {
       construct(last_, *old_iter);
     }
 
-    for (reverse_iterator r_iter = reverse_iterator(old_last),
-             r_end = reverse_iterator(old_first); r_iter != r_end; ++r_iter) {
+    for (reverse_iterator r_iter = reverse_iterator(iterator(old_last)),
+             r_end = reverse_iterator(iterator(old_first)); r_iter != r_end; ++r_iter) {
       destroy(&(*r_iter));
     }
 
@@ -342,18 +304,17 @@ class vector {
     }
   }
 
-  void resize(size_type sz, const_reference value) {
-    if (sz < size()) {
-      difference_type diff = size() - sz;
-      destroy_until(rbegin() + diff);
-      last_ = first_ + sz;
-    } else if (sz > size()) {
-      reserve(sz);
-      for (; last_ != reserved_last_; ++last_) {
-        construct(last_, value);
-      }
+  void resize(size_type n, const_reference value) {
+    if (n < size()) {
+      erase(begin() + n, end());
+    } else if (n > size()) {
+      insert(end(), n - size(), value);
     }
   }
+
+  /*****************************************************************************
+   * Modifiers
+   ****************************************************************************/
 
   /*
    * assign
@@ -421,6 +382,90 @@ class vector {
     }
   }
 
+  /*
+   * List processing
+   * - insert
+   * - erase
+   * - clear
+   */
+
+  /*
+   * insert
+   */
+
+  iterator insert(iterator position, const value_type &val) {
+    size_type offset = std::distance(begin(), position);
+    insert(position, 1, val);
+    return begin() + offset;
+  }
+
+  void insert(iterator position, size_type n, const value_type &val) {
+    if (n == 0) {
+      return ;
+    }
+    size_type offset = std::distance(begin(), position);
+    size_type new_size = size() + n;
+
+    if (new_size > capacity()) {
+      reserve(recommend_capacity_(new_size));
+      position = begin() + offset;
+    }
+    pointer new_last = last_ + n;
+    for (pointer p = last_; p < new_last; p++) {
+      alloc_.construct(p);
+    }
+    std::copy_backward(position, end(), new_last);
+    std::fill(position, position + n, val);
+    last_ = new_last;
+  }
+
+  template<class InputIterator>
+  void insert(iterator position, InputIterator first, InputIterator last,
+              typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
+    size_type offset = std::distance(first, last);
+    difference_type position_distance = std::distance(begin(), position);
+    size_type new_size = size() + offset;
+
+    if (capacity() < new_size) {
+      reserve(recommend_capacity_(new_size));
+      position = begin() + position_distance;
+    }
+    pointer new_last = last_ + offset;
+    for (pointer p = last_; p < new_last; p++) {
+      alloc_.construct(p);
+    }
+    std::copy_backward(position, end(), new_last);
+    std::copy(first, last, position);
+    last_ = new_last;
+  }
+
+  /*
+   * erase
+   */
+
+  iterator erase(iterator position) {
+    return erase(position, position + 1);
+  }
+
+  iterator erase(iterator first, iterator last) {
+    size_type offset = std::distance(first, last);
+    pointer new_last = last_ - offset;
+    std::copy(last.base(), last_, first.base());
+    for (pointer p = new_last; p < last_; p++) {
+      alloc_.destroy(p);
+    }
+    last_ = new_last;
+    return first;
+  }
+
+  /*
+   * clear
+   */
+
+  void clear() {
+    destroy_until(rend());
+  }
+
  private:
   pointer first_;
   pointer last_;
@@ -458,30 +503,13 @@ class vector {
     }
   }
 
-  /**
-   * @brief If need expand capacity, expand capacity
-   */
-  void expand_capacity_(size_type sz) {
+  size_type recommend_capacity_(size_type n) {
+    size_type maxsize = max_size();
     size_type cap = capacity();
-
-    while (sz > cap) {
-      if (cap == 0 && sz == 1) {
-        cap = 1;
-      } else {
-        if (cap <= sz / 2) {
-          cap = sz;
-          if (cap > max_size()) {
-            throw std::overflow_error("too long");
-          }
-        } else {
-          if (cap >= (max_size() / 2)) {
-            throw std::overflow_error("too long");
-          }
-        }
-        cap *= 2;
-      }
+    if (cap >= maxsize / 2) {
+      return maxsize;
     }
-    resize(cap);
+    return (std::max<size_type>(n, cap * 2));
   }
 };
 
