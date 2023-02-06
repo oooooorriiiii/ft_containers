@@ -18,7 +18,7 @@ enable_testing()
 add_executable(
         ft_containers_UnitTest
         vectorTest.cpp
-)
+        iteratorTest.cpp stackTest.cpp)
 target_link_libraries(
         ft_containers_UnitTest
         GTest::gtest_main
