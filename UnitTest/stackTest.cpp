@@ -188,6 +188,37 @@ TEST_F(StackTest, swap) {
   EXPECT_EQ(ft_bar.size(), std_bar.size());
 }
 
+TEST_F(StackTest, operator) {
+  // ft
+  ft::stack<int> ft_foo;
+  ft::stack<int> ft_bar;
+  ft_foo.push(2);
+  ft_bar.push(3);
+  // TRUE
+  EXPECT_TRUE(ft_foo != ft_bar);
+  EXPECT_TRUE(ft_foo < ft_bar);
+  EXPECT_TRUE(ft_foo <= ft_bar);
+  // FALSE
+  EXPECT_FALSE(ft_foo == ft_bar);
+  EXPECT_FALSE(ft_foo > ft_bar);
+  EXPECT_FALSE(ft_foo >= ft_bar);
+
+  // STL
+  std::stack<int> std_foo;
+  std::stack<int> std_bar;
+  std_foo.push(2);
+  std_bar.push(3);
+  // TRUE
+  EXPECT_TRUE(std_foo != std_bar);
+  EXPECT_TRUE(std_foo < std_bar);
+  EXPECT_TRUE(std_foo <= std_bar);
+  // FALSE
+  EXPECT_FALSE(std_foo == std_bar);
+  EXPECT_FALSE(std_foo > std_bar);
+  EXPECT_FALSE(std_foo >= std_bar);
+
+}
+
 
 
 }

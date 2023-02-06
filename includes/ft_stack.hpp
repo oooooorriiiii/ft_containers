@@ -10,6 +10,14 @@
 namespace ft {
 template<typename T, typename C = ft::vector<T>>
 class stack {
+  template<typename _Tp1, typename _Seq1>
+  friend bool
+  operator==(const stack<_Tp1, _Seq1>&, const stack<_Tp1, _Seq1>&);
+
+  template<typename _Tp1, typename _Seq1>
+  friend bool
+  operator<(const stack<_Tp1, _Seq1>&, const stack<_Tp1, _Seq1>&);
+
  public:
   typedef typename C::value_type value_type;
   typedef typename C::reference reference;
@@ -42,6 +50,42 @@ class stack {
  protected:
   C c;
 };
+
+template<typename _Tp, typename _Seq>
+inline bool
+operator==(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y) {
+  return x.c == y.c;
+}
+
+template<typename _Tp, typename _Seq>
+inline bool
+operator<(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y) {
+  return x.c < y.c;
+}
+
+template<typename _Tp, typename _Seq>
+inline bool
+operator!=(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y) {
+  return !(x == y);
+}
+
+template<typename _Tp, typename _Seq>
+inline bool
+operator>(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y) {
+  return y < x;
+}
+
+template<typename _Tp, typename _Seq>
+inline bool
+operator<=(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y) {
+  return !(y < x);
+}
+
+template<typename _Tp, typename _Seq>
+inline bool
+operator>=(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y) {
+  return !(x < y);
+}
 }
 
 #endif //FT_CONTAINERS_INCLUDES_FT_STACK_HPP_
