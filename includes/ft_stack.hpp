@@ -42,11 +42,6 @@ class stack {
  protected:
   C c;
 };
-
-template <class T, class C>
-inline void swap(stack<T, C> &lhs, stack<T, C> &rhs) {
-  lhs.swap(rhs);
-}
 }
 
 #endif //FT_CONTAINERS_INCLUDES_FT_STACK_HPP_
