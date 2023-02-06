@@ -244,4 +244,34 @@ TEST_F(VectorTest, MaxSize) {
   EXPECT_EQ(ft_v.max_size(), std_v.max_size());
 }
 
+TEST_F(VectorTest, operator) {
+  // ft
+  ft::vector<int> ft_foo;
+  ft::vector<int> ft_bar;
+  ft_foo.push_back(2);
+  ft_bar.push_back(3);
+  // TRUE
+  EXPECT_TRUE(ft_foo != ft_bar);
+  EXPECT_TRUE(ft_foo < ft_bar);
+  EXPECT_TRUE(ft_foo <= ft_bar);
+  // FALSE
+  EXPECT_FALSE(ft_foo == ft_bar);
+  EXPECT_FALSE(ft_foo > ft_bar);
+  EXPECT_FALSE(ft_foo >= ft_bar);
+
+  // STL
+  std::vector<int> std_foo;
+  std::vector<int> std_bar;
+  std_foo.push_back(2);
+  std_bar.push_back(3);
+  // TRUE
+  EXPECT_TRUE(std_foo != std_bar);
+  EXPECT_TRUE(std_foo < std_bar);
+  EXPECT_TRUE(std_foo <= std_bar);
+  // FALSE
+  EXPECT_FALSE(std_foo == std_bar);
+  EXPECT_FALSE(std_foo > std_bar);
+  EXPECT_FALSE(std_foo >= std_bar);
+}
+
 }

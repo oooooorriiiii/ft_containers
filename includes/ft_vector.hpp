@@ -11,6 +11,7 @@
 
 #include "utils.hpp"
 #include "ft_iterator.hpp"
+#include "ft_algorithm.hpp"
 
 namespace ft {
 template<class T, class Allocator = std::allocator<T> >
@@ -539,6 +540,43 @@ class vector {
     return (std::max<size_type>(n, cap * 2));
   }
 };
+
+template<class T, class Allocator>
+inline bool
+operator==(const vector<T, Allocator> &x, const vector<T, Allocator> &y) {
+  return (x.size() == y.size()
+      && equal(x.begin(), x.end(), y.begin()));
+}
+
+template<class T, class Allocator>
+inline bool
+operator<(const vector<T, Allocator>& x, const vector<T, Allocator>& y) {
+  return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+}
+
+template<class T, class Allocator>
+inline bool
+operator!=(const vector<T, Allocator>&x, const vector<T, Allocator>& y) {
+  return !(x == y);
+}
+
+template<class T, class Allocator>
+inline bool
+operator>(const vector<T, Allocator>&x, const vector<T, Allocator>& y) {
+  return y < x;
+}
+
+template<class T, class Allocator>
+inline bool
+operator<=(const vector<T, Allocator>&x, const vector<T, Allocator>& y) {
+  return !(y < x);
+}
+
+template<class T, class Allocator>
+inline bool
+operator>=(const vector<T, Allocator>&x, const vector<T, Allocator>& y) {
+  return !(x < y);
+}
 
 } // ft
 
